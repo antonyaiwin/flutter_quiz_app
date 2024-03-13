@@ -47,6 +47,7 @@ class _SecondScreenState extends State<SecondScreen> {
             ListView.separated(
               shrinkWrap: true,
               itemBuilder: (context, index) => OptionsCard(
+                  isSelected: selectedAnswerIndex == index,
                   borderColor: selectedAnswerIndex == index
                       ? (selectedAnswerIndex ==
                               HomeScreenController
