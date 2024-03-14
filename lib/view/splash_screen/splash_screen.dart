@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quiz_app/view/second_screen/second_screen.dart';
+import 'package:flutter_quiz_app/view/quiz_screen/quiz_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
         .then((value) => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const SecondScreen(),
+              builder: (context) => const QuizScreen(),
             )));
     super.initState();
   }

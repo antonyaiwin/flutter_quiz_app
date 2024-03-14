@@ -7,12 +7,14 @@ class OptionsCard extends StatelessWidget {
     required this.borderColor,
     this.onTap,
     required this.isSelected,
+    this.icon,
   });
 
   final String optionLabel;
   final Color borderColor;
   final void Function()? onTap;
   final bool isSelected;
+  final IconData? icon;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -26,9 +28,10 @@ class OptionsCard extends StatelessWidget {
         child: Row(
           children: [
             Expanded(child: Text(optionLabel)),
-            Icon(isSelected
-                ? Icons.radio_button_checked
-                : Icons.radio_button_unchecked),
+            Icon(
+              icon,
+              color: borderColor,
+            ),
           ],
         ),
       ),

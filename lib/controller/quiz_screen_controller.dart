@@ -1,6 +1,6 @@
 import '../model/question_model.dart';
 
-class HomeScreenController {
+class QuizScreenController {
   static const List<QuestionModel> flutterDartQuestions = [
     QuestionModel(
       question: 'What is Flutter?',
