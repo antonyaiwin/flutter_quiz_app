@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quiz_app/controller/quiz_screen_controller.dart';
+import 'package:flutter_quiz_app/model/category_model.dart';
+import 'package:flutter_quiz_app/model/question_model.dart';
 import 'package:flutter_quiz_app/view/results_screen/results_screen.dart';
 
 import '../../common/widgets/custom_button.dart';
 import 'widgets/options_card.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
-
+  const QuizScreen({super.key, required this.categoryModel});
+  final CategoryModel categoryModel;
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
   int currentQuestionIndex = 0;
+  List<QuestionModel> get questionsList => widget.categoryModel.questionsList;
 
-  int marks = 0;
+  int correctAnswers = 0;
+  int wrongAnswers = 0;
   int? selectedAnswerIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          Text(
-            '${currentQuestionIndex + 1}/${QuizScreenController.flutterDartQuestions.length}',
-            style: const TextStyle(color: Colors.blue),
+          Center(
+            child: Text(
+              '${currentQuestionIndex + 1}/${questionsList.length}',
+              style: const TextStyle(color: Colors.blue),
+            ),
           ),
           const SizedBox(width: 20),
         ],
@@ -41,8 +46,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                QuizScreenController
-                    .flutterDartQuestions[currentQuestionIndex].question,
+                questionsList[currentQuestionIndex].question,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -58,46 +62,49 @@ class _QuizScreenState extends State<QuizScreen> {
                         setState(() {
                           selectedAnswerIndex = index;
                           if (selectedAnswerIndex ==
-                              QuizScreenController
-                                  .flutterDartQuestions[currentQuestionIndex]
+                              questionsList[currentQuestionIndex]
                                   .correctAnswerIndex) {
-                            marks++;
+                            correctAnswers++;
+                          } else {
+                            wrongAnswers++;
                           }
                         });
                       },
-                optionLabel: QuizScreenController
-                    .flutterDartQuestions[currentQuestionIndex].options[index],
+                optionLabel: questionsList[currentQuestionIndex].options[index],
                 icon: buildIcon(index),
               ),
               separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemCount: QuizScreenController
-                  .flutterDartQuestions[currentQuestionIndex].options.length,
+              itemCount: questionsList[currentQuestionIndex].options.length,
             ),
             const SizedBox(height: 30),
             CustomButton(
-              onTap: selectedAnswerIndex == null
-                  ? null
-                  : () {
-                      if (currentQuestionIndex <
-                          QuizScreenController.flutterDartQuestions.length -
-                              1) {
-                        setState(() {
-                          selectedAnswerIndex = null;
-                          currentQuestionIndex++;
-                        });
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ResultsScreen(
-                              correctAnswerCount: marks,
-                              totalQuestionCount: QuizScreenController
-                                  .flutterDartQuestions.length,
-                            ),
-                          ),
-                        );
-                      }
-                    },
+              isSkip: currentQuestionIndex != questionsList.length - 1 &&
+                  selectedAnswerIndex == null,
+              label: currentQuestionIndex == questionsList.length - 1
+                  ? 'Finish'
+                  : selectedAnswerIndex == null
+                      ? 'Skip'
+                      : 'Next',
+              onTap: () async {
+                if (currentQuestionIndex < questionsList.length - 1) {
+                  setState(() {
+                    selectedAnswerIndex = null;
+                    currentQuestionIndex++;
+                  });
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResultsScreen(
+                        categoryModel: widget.categoryModel,
+                        correctAnswerCount: correctAnswers,
+                        wrongAnswersCount: wrongAnswers,
+                        totalQuestionCount: questionsList.length,
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),
@@ -107,9 +114,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Color buildColor(int index) {
     if ((selectedAnswerIndex != null &&
-        index ==
-            QuizScreenController.flutterDartQuestions[currentQuestionIndex]
-                .correctAnswerIndex)) {
+        index == questionsList[currentQuestionIndex].correctAnswerIndex)) {
       return Colors.green;
     } else if (selectedAnswerIndex != index) {
       return Colors.white70;
@@ -139,9 +144,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   IconData? buildIcon(int index) {
     if ((selectedAnswerIndex != null &&
-        index ==
-            QuizScreenController.flutterDartQuestions[currentQuestionIndex]
-                .correctAnswerIndex)) {
+        index == questionsList[currentQuestionIndex].correctAnswerIndex)) {
       return Icons.done_rounded;
     } else if (selectedAnswerIndex == index) {
       return Icons.close_rounded;

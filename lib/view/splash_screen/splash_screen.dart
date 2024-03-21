@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quiz_app/view/quiz_screen/quiz_screen.dart';
+import 'package:flutter_quiz_app/view/quiz_screen/categories_screen/categories_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
         .then((value) => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const QuizScreen(),
+              builder: (context) => const CategoriesScreen(),
             )));
     super.initState();
   }
@@ -24,12 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          'Quiz App',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(fontWeight: FontWeight.w900),
+        child: Padding(
+          padding: const EdgeInsets.all(100),
+          child: Image.asset('assets/images/quiz-logo.webp'),
         ),
       ),
     );

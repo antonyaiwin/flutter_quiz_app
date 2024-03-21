@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quiz_app/core/constants/color_constants.dart';
 
 import 'view/splash_screen/splash_screen.dart';
 
@@ -15,12 +16,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: ColorConstants.primaryAmber,
           brightness: Brightness.dark,
         ),
-        useMaterial3: true,
+        useMaterial3: false,
       ),
       home: const SplashScreen(),
     );

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../core/constants/color_constants.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({
-    super.key,
-    this.onTap,
-  });
+  const CustomButton(
+      {super.key, this.onTap, required this.label, required this.isSkip});
   final void Function()? onTap;
+  final String label;
+  final bool isSkip;
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +18,14 @@ class CustomButton extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color:
-              ColorConstants.primaryBlue.withOpacity(onTap == null ? 0.2 : 1),
+          color: isSkip
+              ? ColorConstants.primaryGrey
+              : ColorConstants.primaryBlue.withOpacity(onTap == null ? 0.2 : 1),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: Text(
-            'Next',
+            label,
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
